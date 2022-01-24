@@ -2,14 +2,18 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\FormationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\FormationRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * normalizationContext={"groups"={"formation:read"}},
+ *     denormalizationContext={"groups"={"formation:write"}}
+ * )
  * @ORM\Entity(repositoryClass=FormationRepository::class)
  */
 class Formation
@@ -18,32 +22,38 @@ class Formation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"formation:read","formateur:read","condidat:read","certif:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"formation:read","formation:write","formateur:read","condidat:read","certif:read"})
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=Formateur::class, inversedBy="formation")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"formation:write"})
      */
     private $formateur;
 
     /**
      * @ORM\ManyToMany(targetEntity=Condidat::class, mappedBy="formation")
+     * @Groups({"formation:read"})
      */
     private $condidats;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"formation:read","formation:write"})
      */
     private $prix;
 
     /**
      * @ORM\OneToMany(targetEntity=Certificat::class, mappedBy="formation")
+     * 
      */
     private $certification;
 

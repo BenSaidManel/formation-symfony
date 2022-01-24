@@ -23,9 +23,9 @@ class CondidatController extends AbstractController
     public function index(CondidatRepository $CondidatRepository)
     {
         $ListCondidat = $CondidatRepository->findAll();
-        //$rep = $this->json($ListCondidat,200,[],['groups' =>'post:read']);
+       
         return $this->Json($ListCondidat);
-       //return $rep;
+       
     }
 
    

@@ -2,13 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-use symfony\Component\Serializer\Annotation\Groups;
+use App\Repository\CertificatRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
- * @ApiResource()
+ * 
  * @ORM\Entity(repositoryClass=CertificatRepository::class)
+ * @ApiResource(
+ *   normalizationContext={"groups"={"certif:read"}},
+ *     denormalizationContext={"groups"={"certif:write"}}
+ * )
+ * 
  */
 class Certificat
 {
@@ -16,18 +23,20 @@ class Certificat
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * 
+     * @Groups({"certif:read","condidat:read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Condidat::class, inversedBy="certification")
+     * @Groups({"certif:read","certif:write"})
      * 
      */
     private $condidat;
 
     /**
      * @ORM\ManyToOne(targetEntity=Formation::class, inversedBy="certification")
+     * @Groups({"certif:read"})
      */
     private $formation;
 

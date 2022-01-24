@@ -37,7 +37,8 @@ class FormationController extends AbstractController
         
         $entityManager->persist($Formation);
         $entityManager->flush();
-        return $this->json($Formation);
+        return $this->json($Formation,200,[]);
+        
         
     }
     /**

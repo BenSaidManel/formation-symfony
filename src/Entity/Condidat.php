@@ -5,13 +5,19 @@ namespace App\Entity;
 use App\Entity\Formation;
 use App\Entity\Certificat;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CondidatRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ *
  * @ORM\Entity(repositoryClass=CondidatRepository::class)
+ * @ApiResource(
+ *    normalizationContext={"groups"={"condidat:read"}},
+ *     denormalizationContext={"groups"={"condidat:write"}}
+ *     )
  */
 class Condidat
 {
@@ -19,31 +25,37 @@ class Condidat
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"condidat:read","certif:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"condidat:read","condidat:write","certif:read"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"condidat:read","condidat:write"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"condidat:read","condidat:write"})
      */
     private $password;
 
     /**
      * @ORM\ManyToMany(targetEntity=Formation::class, inversedBy="condidats")
+     * @Groups({"condidat:read","condidat:write"})
      */
     private $formation;
 
     /**
      * @ORM\OneToMany(targetEntity=Certificat::class, mappedBy="condidat")
+     * @Groups({"condidat:read"})
      */
     private $certification;
 
